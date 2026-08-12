@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Peringkat Mahasiswa Baru PTB — PPKMB 2026</title>
+<style>
+  :root{
+    --navy:#16324F;
+    --navy-deep:#0D2038;
+    --gold:#C9A227;
+    --gold-soft:#E8D6A0;
+    --cream:#F7F5EF;
+    --line:#DCD6C4;
+    --text:#22303F;
+    --muted:#6B7684;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--cream);
+    font-family:'Georgia','Iowan Old Style',serif;
+    color:var(--text);
+    padding:32px 16px 80px;
+  }
+  .wrap{max-width:780px;margin:0 auto;}
+  header{
+    text-align:center;
+    margin-bottom:8px;
+  }
+  .eyebrow{
+    font-family:'Helvetica Neue',Arial,sans-serif;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    font-size:11px;
+    color:var(--gold);
+    font-weight:700;
+    margin-bottom:6px;
+  }
+  h1{
+    font-size:28px;
+    margin:0 0 4px;
+    color:var(--navy-deep);
+    font-weight:700;
+    letter-spacing:-.01em;
+  }
+  .sub{
+    font-family:'Helvetica Neue',Arial,sans-serif;
+    color:var(--muted);
+    font-size:13px;
+    margin-bottom:28px;
+  }
+  .add-form{
+    display:flex;
+    gap:8px;
+    margin-bottom:20px;
+    font-family:'Helvetica Neue',Arial,sans-serif;
+  }
+  .add-form input{
+    font-family:inherit;
+    font-size:13px;
+    padding:9px 12px;
+    border:1px solid var(--line);
+    border-radius:8px;
+    background:#fff;
+    color:var(--text);
+  }
+  .add-form input:focus{outline:2px solid var(--gold-soft);border-color:var(--gold);}
+  #add-name{flex:1;min-width:0;}
+  #add-nim{width:140px;}
+  .add-form button{
+    font-family:inherit;
+    font-size:13px;
+    font-weight:700;
+    padding:9px 18px;
+    border:none;
+    border-radius:8px;
+    background:var(--navy);
+    color:#fff;
+    cursor:pointer;
+    transition:.15s;
+  }
+  .add-form button:hover{background:var(--navy-deep);}
+  @media (max-width:480px){
+    .add-form{flex-wrap:wrap;}
+    #add-nim{width:100px;}
+  }
+
+  .toolbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-family:'Helvetica Neue',Arial,sans-serif;
+    font-size:12px;
+    color:var(--muted);
+    margin-bottom:14px;
+    padding:0 2px;
+  }
+  #reset-btn{
+    font-family:inherit;
+    background:none;
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:5px 14px;
+    font-size:11.5px;
+    color:var(--navy);
+    cursor:pointer;
+    transition:.15s;
+  }
+  #reset-btn:hover{background:var(--navy);color:#fff;border-color:var(--navy);}
+
+  .row{
+    display:grid;
+    grid-template-columns:38px 1fr auto;
+    gap:14px;
+    align-items:center;
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:12px 16px;
+    margin-bottom:8px;
+    transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+  }
+  .row.top{
+    border-color:var(--gold);
+    box-shadow:0 2px 10px rgba(201,162,39,.18);
+    background:linear-gradient(90deg,#fffdf6,#ffffff);
+  }
+  .rank{
+    font-family:'Helvetica Neue',Arial,sans-serif;
+    font-weight:700;
+    font-size:15px;
+    color:var(--muted);
+    text-align:center;
+  }
+  .row.top .rank{color:var(--gold);font-size:17px;}
+  .medal{font-size:16px;}
+  .info{min-width:0;}
+  .name{
+    font-size:15.5px;
+    font-weight:700;
+    color:var(--navy-deep);
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .meta{
+    font-family:'Helvetica Neue',Arial,sans-serif;
+    font-size:11.5px;
+    color:var(--muted);
+    margin-top:2px;
+  }
+  .stars{
+    display:flex;
+    flex-wrap:wrap;
+    gap:1px;
+    max-width:140px;
+    font-size:14px;
+    line-height:1;
+    user-select:none;
+    justify-content:flex-end;
+  }
+  .star{
+    cursor:pointer;
+    color:var(--line);
+    transition:transform .12s ease, color .12s ease;
+  }
+  .star:hover{transform:scale(1.15);}
+  .star.on{color:var(--gold);}
+
+  footer{
+    text-align:center;
+    font-family:'Helvetica Neue',Arial,sans-serif;
+    font-size:11px;
+    color:var(--muted);
+    margin-top:26px;
+  }
+  .empty-note{
+    font-family:'Helvetica Neue',Arial,sans-serif;
+    font-size:12px;
+    color:var(--muted);
+    text-align:center;
+    padding:10px;
+  }
+  @media (max-width:480px){
+    .row{grid-template-columns:28px 1fr auto;padding:10px 10px;gap:8px;}
+    .stars{font-size:12px;max-width:100px;}
+    .name{font-size:14px;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">FKIP Undana · PPKMB 12–28 Agustus 2026</div>
+    <h1>Peringkat Mahasiswa Baru PTB</h1>
+    <div class="sub">Klik bintang untuk menilai — daftar otomatis terurut dari bintang terbanyak</div>
+  </header>
+
+  <form id="add-form" class="add-form">
+    <input id="add-name" type="text" placeholder="Nama mahasiswa" required>
+    <input id="add-nim" type="text" placeholder="NIM (opsional)">
+    <button type="submit">Tambah</button>
+  </form>
+
+  <div class="toolbar">
+    <span id="status-text">Memuat data tersimpan…</span>
+    <button id="reset-btn">Reset semua bintang</button>
+  </div>
+
+  <div id="list"></div>
+  <footer>Peringkat tersimpan otomatis di perangkat ini · 60 mahasiswa PTB angkatan 2026</footer>
+</div>
+
+<script>
+const students = [
+  ["BRIAN PEKULIMU","2601110001"],["IRWAN SELLY","2601110002"],["MARIO EFANDY MOGI","2601110003"],
+  ["KHEN KAYANA Z. FORA","2601110004"],["VENANSIUS LAGA","2601110005"],["FIRA MELISA LELIK","2601110006"],
+  ["ARNOLDUS Y. TANINES","2601110007"],["YASINTA M. K. PARERA","2601110008"],["RASTANIA GUNER","2601110009"],
+  ["CHINTYA MEGA UTAN","2601110010"],["YOSEP KELFIN LAKE","2601110011"],["YASRY A. JULIATI LAMI","2601110012"],
+  ["SHARBELIAND F. TUNTI","2601110013"],["VARELIO ASBITU","2601110014"],["YOHANES C. H. KEUPUNG","2601110015"],
+  ["YOHANES CHARLES SUNTI","2601110016"],["YODI SIOKAIN","2601110017"],["MELSONSIUS DJAVAN WUNU","2601110018"],
+  ["AKWILA ODILIA HOAR TETI","2601110019"],["BLASIUS RERA","2601110020"],["EMANUEL REKU","2601110021"],
+  ["ARKADIUS FIRMANTO DARI","2601110022"],["MARIA PLASIDA NINO","2601110023"],["RAHMI MARTANTI KENENG","2601110024"],
+  ["SAMUEL I. SERA D. FANGIDAE","2601110025"],["GUNTRANUS VIKTORI TUEN","2601110026"],["JHUN ALEXANDRO DE M. MAMO","2601110027"],
+  ["JUNPRIMUS UN MANEK","2601110028"],["HELROMANUS AMA KALU","2601110029"],["KARTIN PUTRA P. TOBE","2601110030"],
+  ["YERUSA AKSAFINA KENAT","2601110031"],["SARDI NGGIMATARA","2601110032"],["STEFANY DELLACINDY LONDA","2601110033"],
+  ["MARTA SOPHIA LAPE","2601110034"],["MARIA DIANA LADI LARA","2601110035"],["CLIFFORD MANOEL RIWU","2601110036"],
+  ["JUVITA RINANDA LAKE","2601110037"],["ADITIA OLA KUDI","2601110038"],["FANGKI NELON LONAK","2601110039"],
+  ["ANI MARSELA NATUN","2601110040"],["DAVID RONALDI LAO","2601110041"],["NONGKY NENO","2601110042"],
+  ["YASINTUS AMA PAYONG","2601110043"],["OFALDUS GUSTI","2601110044"],["RISKY ADITHIA SONBAI","2601110045"],
+  ["DOCTOR S. L. HINADONU","2601110046"],["RADHA MEINDORI LANGKOLA","2601110047"],["OPINTINUS SUGIARTO","2601110048"],
+  ["MELANI SAKAN","2601110049"],["SEBASTIANUS DIKEN WEKING","2601110050"],["RESTU SALI","2601110051"],
+  ["BENEDIKTUS MAUMABE","2601110052"],["WELGIANA FLORA SERAN","2601110053"],["FRANSISKO FALENTINO DEMA","2601110054"],
+  ["FEBRIANA TEFBANA","2601110055"],["YOHANES BOSKO ELU","2601110056"],["ANDREAS PEKERTI BESIN","2601110057"],
+  ["PETER PANDIE","2601110058"],["ALEXANDROS LODA LONGA","2601110059"],["LINDA DEBORA PATOLA","2601110060"]
+];
+
+const STORAGE_KEY = "ptb-ppkmb-2026-ratings";
+const STORAGE_STUDENTS_KEY = "ptb-ppkmb-2026-added-students";
+let ratings = {}; // { nim: starCount }
+let addedStudents = []; // [[name, nim], ...]
+
+const listEl = document.getElementById("list");
+const statusEl = document.getElementById("status-text");
+const resetBtn = document.getElementById("reset-btn");
+const addForm = document.getElementById("add-form");
+const addNameInput = document.getElementById("add-name");
+const addNimInput = document.getElementById("add-nim");
+
+function allStudents(){
+  return students.concat(addedStudents);
+}
+
+function medalFor(idx){
+  if(idx===0) return "🥇";
+  if(idx===1) return "🥈";
+  if(idx===2) return "🥉";
+  return null;
+}
+
+function render(){
+  const order = allStudents()
+    .map(([name,nim],i)=>{
+      const key = nim && nim.trim() ? nim : `_noNIM_${i}`;
+      return {name,nim:key,label:nim && nim.trim() ? nim : "—",origIdx:i,stars:ratings[key]||0};
+    })
+    .sort((a,b)=> b.stars - a.stars || a.origIdx - b.origIdx);
+
+  listEl.innerHTML = "";
+  order.forEach((s,idx)=>{
+    const row = document.createElement("div");
+    row.className = "row" + (s.stars>0 && idx<3 ? " top" : "");
+
+    const rank = document.createElement("div");
+    rank.className = "rank";
+    const medal = medalFor(idx);
+    rank.innerHTML = (medal && s.stars>0) ? `<span class="medal">${medal}</span>` : (idx+1);
+
+    const info = document.createElement("div");
+    info.className = "info";
+    info.innerHTML = `<div class="name">${s.name}</div><div class="meta">NIM ${s.label} · PTB</div>`;
+
+    const starsWrap = document.createElement("div");
+    starsWrap.className = "stars";
+    for(let i=1;i<=12;i++){
+      const star = document.createElement("span");
+      star.className = "star" + (i<=s.stars ? " on" : "");
+      star.textContent = i<=s.stars ? "★" : "☆";
+      star.addEventListener("click", ()=>{
+        ratings[s.nim] = (ratings[s.nim]===i) ? i-1 : i; // klik bintang sama = kurangi ke situ, toggle turun jika sama persis
+        if(ratings[s.nim] === 0 && i===1 && s.stars===1) ratings[s.nim] = 0;
+        save();
+        render();
+      });
+      starsWrap.appendChild(star);
+    }
+
+    row.appendChild(rank);
+    row.appendChild(info);
+    row.appendChild(starsWrap);
+    listEl.appendChild(row);
+  });
+}
+
+async function save(){
+  try{
+    await window.storage.set(STORAGE_KEY, JSON.stringify(ratings), false);
+    statusEl.textContent = "Tersimpan otomatis";
+  }catch(e){
+    statusEl.textContent = "Gagal menyimpan (coba lagi)";
+    console.error(e);
+  }
+}
+
+async function saveStudents(){
+  try{
+    await window.storage.set(STORAGE_STUDENTS_KEY, JSON.stringify(addedStudents), false);
+  }catch(e){
+    console.error(e);
+  }
+}
+
+async function load(){
+  try{
+    const res = await window.storage.get(STORAGE_KEY, false);
+    ratings = res && res.value ? JSON.parse(res.value) : {};
+  }catch(e){
+    ratings = {};
+  }
+  try{
+    const res2 = await window.storage.get(STORAGE_STUDENTS_KEY, false);
+    addedStudents = res2 && res2.value ? JSON.parse(res2.value) : [];
+  }catch(e){
+    addedStudents = [];
+  }
+  statusEl.textContent = "Data tersimpan dimuat";
+  render();
+}
+
+resetBtn.addEventListener("click", async ()=>{
+  ratings = {};
+  await save();
+  statusEl.textContent = "Semua bintang direset";
+  render();
+});
+
+addForm.addEventListener("submit", async (e)=>{
+  e.preventDefault();
+  const name = addNameInput.value.trim().toUpperCase();
+  const nim = addNimInput.value.trim();
+  if(!name) return;
+  addedStudents.push([name, nim]);
+  await saveStudents();
+  addNameInput.value = "";
+  addNimInput.value = "";
+  statusEl.textContent = `${name} ditambahkan`;
+  render();
+  addNameInput.focus();
+});
+
+load();
+</script>
+</body>
+</html>
