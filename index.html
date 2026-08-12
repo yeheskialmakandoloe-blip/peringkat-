@@ -4,132 +4,57 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Peringkat Mahasiswa Baru PTB — PPKMB 2026</title>
+
+<!-- Firebase (untuk simpan & sinkron data ke semua HP) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+
 <style>
   :root{
-    --navy:#16324F;
-    --navy-deep:#0D2038;
-    --gold:#C9A227;
-    --gold-soft:#E8D6A0;
-    --cream:#F7F5EF;
-    --line:#DCD6C4;
-    --text:#22303F;
-    --muted:#6B7684;
+    --navy:#16324F; --navy-deep:#0D2038; --gold:#C9A227; --gold-soft:#E8D6A0;
+    --cream:#F7F5EF; --line:#DCD6C4; --text:#22303F; --muted:#6B7684;
   }
   *{box-sizing:border-box;}
-  body{
-    margin:0;
-    background:var(--cream);
-    font-family:'Georgia','Iowan Old Style',serif;
-    color:var(--text);
-    padding:32px 16px 80px;
-  }
+  body{margin:0;background:var(--cream);font-family:'Georgia','Iowan Old Style',serif;color:var(--text);padding:32px 16px 80px;}
   .wrap{max-width:820px;margin:0 auto;}
   header{text-align:center;margin-bottom:8px;}
-  .eyebrow{
-    font-family:'Helvetica Neue',Arial,sans-serif;
-    letter-spacing:.14em;
-    text-transform:uppercase;
-    font-size:11px;
-    color:var(--gold);
-    font-weight:700;
-    margin-bottom:6px;
-  }
-  h1{font-size:28px;margin:0 0 4px;color:var(--navy-deep);font-weight:700;letter-spacing:-.01em;}
+  .eyebrow{font-family:'Helvetica Neue',Arial,sans-serif;letter-spacing:.14em;text-transform:uppercase;font-size:11px;color:var(--gold);font-weight:700;margin-bottom:6px;}
+  h1{font-size:26px;margin:0 0 4px;color:var(--navy-deep);font-weight:700;letter-spacing:-.01em;}
   .sub{font-family:'Helvetica Neue',Arial,sans-serif;color:var(--muted);font-size:13px;margin-bottom:22px;}
 
-  .admin-bar{
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    gap:8px;
-    font-family:'Helvetica Neue',Arial,sans-serif;
-    margin-bottom:18px;
-    flex-wrap:wrap;
+  #setup-notice{
+    max-width:560px;margin:40px auto;background:#fff;border:1px solid var(--line);
+    border-radius:12px;padding:24px 26px;font-family:'Helvetica Neue',Arial,sans-serif;
+    font-size:13.5px;line-height:1.7;color:var(--text);
   }
-  .badge{
-    font-size:11px;
-    font-weight:700;
-    padding:5px 12px;
-    border-radius:20px;
-    letter-spacing:.03em;
-  }
+  #setup-notice h2{font-family:Georgia,serif;font-size:19px;color:var(--navy-deep);margin-top:0;}
+  #setup-notice code{background:var(--cream);padding:2px 6px;border-radius:5px;font-size:12.5px;}
+  #setup-notice a{color:var(--navy);}
+  #setup-notice ol{padding-left:20px;}
+
+  .admin-bar{display:flex;justify-content:center;align-items:center;gap:8px;font-family:'Helvetica Neue',Arial,sans-serif;margin-bottom:18px;flex-wrap:wrap;}
+  .badge{font-size:11px;font-weight:700;padding:5px 12px;border-radius:20px;letter-spacing:.03em;}
   .badge.view{background:#EFEBDF;color:var(--muted);}
   .badge.admin{background:var(--navy);color:#fff;}
-  #pin-input{
-    font-family:inherit;
-    font-size:12.5px;
-    padding:6px 10px;
-    border:1px solid var(--line);
-    border-radius:8px;
-    width:110px;
-  }
-  #pin-btn, #logout-btn{
-    font-family:inherit;
-    font-size:12px;
-    font-weight:700;
-    padding:6px 14px;
-    border:1px solid var(--navy);
-    border-radius:20px;
-    background:#fff;
-    color:var(--navy);
-    cursor:pointer;
-    transition:.15s;
-  }
+  #pin-input{font-family:inherit;font-size:12.5px;padding:6px 10px;border:1px solid var(--line);border-radius:8px;width:110px;}
+  #pin-btn, #logout-btn{font-family:inherit;font-size:12px;font-weight:700;padding:6px 14px;border:1px solid var(--navy);border-radius:20px;background:#fff;color:var(--navy);cursor:pointer;transition:.15s;}
   #pin-btn:hover, #logout-btn:hover{background:var(--navy);color:#fff;}
   #pin-msg{font-size:11.5px;color:#B5473A;}
 
-  .add-form{
-    display:flex;
-    gap:8px;
-    margin-bottom:20px;
-    font-family:'Helvetica Neue',Arial,sans-serif;
-  }
-  .add-form input{
-    font-family:inherit;
-    font-size:13px;
-    padding:9px 12px;
-    border:1px solid var(--line);
-    border-radius:8px;
-    background:#fff;
-    color:var(--text);
-  }
+  .add-form{display:flex;gap:8px;margin-bottom:20px;font-family:'Helvetica Neue',Arial,sans-serif;}
+  .add-form input{font-family:inherit;font-size:13px;padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--text);}
   .add-form input:focus{outline:2px solid var(--gold-soft);border-color:var(--gold);}
   #add-name{flex:1;min-width:0;}
   #add-nim{width:140px;}
-  .add-form button{
-    font-family:inherit;font-size:13px;font-weight:700;padding:9px 18px;
-    border:none;border-radius:8px;background:var(--navy);color:#fff;cursor:pointer;transition:.15s;
-  }
+  .add-form button{font-family:inherit;font-size:13px;font-weight:700;padding:9px 18px;border:none;border-radius:8px;background:var(--navy);color:#fff;cursor:pointer;transition:.15s;}
   .add-form button:hover{background:var(--navy-deep);}
 
-  .toolbar{
-    display:flex;justify-content:space-between;align-items:center;
-    font-family:'Helvetica Neue',Arial,sans-serif;font-size:12px;color:var(--muted);
-    margin-bottom:14px;padding:0 2px;
-  }
-  #reset-btn{
-    font-family:inherit;background:none;border:1px solid var(--line);border-radius:20px;
-    padding:5px 14px;font-size:11.5px;color:var(--navy);cursor:pointer;transition:.15s;
-  }
+  .toolbar{display:flex;justify-content:space-between;align-items:center;font-family:'Helvetica Neue',Arial,sans-serif;font-size:12px;color:var(--muted);margin-bottom:14px;padding:0 2px;}
+  #reset-btn{font-family:inherit;background:none;border:1px solid var(--line);border-radius:20px;padding:5px 14px;font-size:11.5px;color:var(--navy);cursor:pointer;transition:.15s;}
   #reset-btn:hover{background:var(--navy);color:#fff;border-color:var(--navy);}
 
-  .row{
-    display:grid;
-    grid-template-columns:38px 1fr auto auto;
-    gap:12px;
-    align-items:center;
-    background:#fff;
-    border:1px solid var(--line);
-    border-radius:10px;
-    padding:12px 16px;
-    margin-bottom:8px;
-    transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease;
-  }
-  .row.top{
-    border-color:var(--gold);
-    box-shadow:0 2px 10px rgba(201,162,39,.18);
-    background:linear-gradient(90deg,#fffdf6,#ffffff);
-  }
+  .row{display:grid;grid-template-columns:38px 1fr auto auto;gap:12px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin-bottom:8px;transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease;}
+  .row.top{border-color:var(--gold);box-shadow:0 2px 10px rgba(201,162,39,.18);background:linear-gradient(90deg,#fffdf6,#ffffff);}
   .rank{font-family:'Helvetica Neue',Arial,sans-serif;font-weight:700;font-size:15px;color:var(--muted);text-align:center;}
   .row.top .rank{color:var(--gold);font-size:17px;}
   .medal{font-size:16px;}
@@ -143,23 +68,8 @@
   .stars.editable .star{cursor:pointer;}
   .stars.editable .star:hover{transform:scale(1.15);}
 
-  .percent{
-    font-family:'Helvetica Neue',Arial,sans-serif;
-    font-weight:700;
-    font-size:13px;
-    color:var(--navy);
-    text-align:right;
-    min-width:52px;
-  }
-  .percent-input{
-    font-family:'Helvetica Neue',Arial,sans-serif;
-    font-size:12.5px;
-    width:56px;
-    padding:5px 6px;
-    border:1px solid var(--line);
-    border-radius:6px;
-    text-align:right;
-  }
+  .percent{font-family:'Helvetica Neue',Arial,sans-serif;font-weight:700;font-size:13px;color:var(--navy);text-align:right;min-width:52px;}
+  .percent-input{font-family:'Helvetica Neue',Arial,sans-serif;font-size:12.5px;width:56px;padding:5px 6px;border:1px solid var(--line);border-radius:6px;text-align:right;}
   .percent-input:focus{outline:2px solid var(--gold-soft);border-color:var(--gold);}
 
   footer{text-align:center;font-family:'Helvetica Neue',Arial,sans-serif;font-size:11px;color:var(--muted);margin-top:26px;}
@@ -173,6 +83,23 @@
 </style>
 </head>
 <body>
+
+<div id="setup-notice" style="display:none;">
+  <h2>Satu langkah lagi: hubungkan penyimpanan</h2>
+  <p>Halaman ini butuh database gratis (Firebase) supaya nilai yang Anda isi tersimpan dan langsung terlihat di semua HP. Ikuti langkah ini sekali saja:</p>
+  <ol>
+    <li>Buka <a href="https://console.firebase.google.com" target="_blank">console.firebase.google.com</a> → <strong>Add project</strong> → beri nama bebas → lanjutkan (boleh matikan Google Analytics).</li>
+    <li>Di menu kiri, klik <strong>Build → Realtime Database</strong> → <strong>Create Database</strong> → pilih lokasi → mulai dalam <strong>test mode</strong>.</li>
+    <li>Di menu kiri atas (ikon gerigi) → <strong>Project settings</strong> → scroll ke <strong>Your apps</strong> → klik ikon <strong>&lt;/&gt; (Web)</strong> → beri nama app → <strong>Register app</strong>.</li>
+    <li>Firebase akan menampilkan kode <code>firebaseConfig = {'{'} apiKey: "...", ... {'}'}</code>. Salin seluruh isinya.</li>
+    <li>Buka file <code>index.html</code> ini di GitHub (edit langsung di browser, ikon pensil), cari tulisan <code>const firebaseConfig = { ... }</code> di bagian bawah, dan ganti dengan yang Anda salin tadi. Simpan (commit).</li>
+    <li>Kembali ke tab <strong>Realtime Database → Rules</strong> di Firebase, ganti isinya jadi:<br>
+      <code>{ "rules": { ".read": true, ".write": true } }</code><br>lalu klik <strong>Publish</strong>.</li>
+  </ol>
+  <p>Setelah itu, muat ulang halaman ini — sudah bisa dipakai dan tersimpan otomatis ke semua orang yang membuka tautannya.</p>
+</div>
+
+<div id="app" style="display:none;">
 <div class="wrap">
   <header>
     <div class="eyebrow">FKIP Undana · PPKMB 12–28 Agustus 2026</div>
@@ -180,12 +107,7 @@
     <div class="sub">Diurutkan dari bintang terbanyak — nilai persen jadi pembeda saat bintang sama</div>
   </header>
 
-  <div class="admin-bar" id="admin-bar">
-    <span class="badge view" id="mode-badge">Mode Lihat</span>
-    <input id="pin-input" type="password" placeholder="Kode admin" maxlength="20">
-    <button id="pin-btn">Masuk</button>
-    <span id="pin-msg"></span>
-  </div>
+  <div class="admin-bar" id="admin-bar"></div>
 
   <form id="add-form" class="add-form" style="display:none;">
     <input id="add-name" type="text" placeholder="Nama mahasiswa" required>
@@ -199,7 +121,8 @@
   </div>
 
   <div id="list"></div>
-  <footer>Data peringkat dibagikan ke semua yang membuka tautan ini · hanya admin yang bisa menilai · 60 mahasiswa PTB angkatan 2026</footer>
+  <footer>Data tersinkron otomatis ke semua HP · hanya admin yang bisa menilai · 60 mahasiswa PTB angkatan 2026</footer>
+</div>
 </div>
 
 <script>
@@ -226,13 +149,25 @@ const students = [
   ["PETER PANDIE","2601110058"],["ALEXANDROS LODA LONGA","2601110059"],["LINDA DEBORA PATOLA","2601110060"]
 ];
 
-const ADMIN_PIN = "PTB2026"; // ganti sesuai keinginan Anda di dalam kode ini
-const DATA_KEY = "ptb-ppkmb-2026-data"; // disimpan SHARED, semua orang yang buka lihat data yang sama
+const ADMIN_PIN = "PTB2026"; // GANTI kode ini sesuai keinginan Anda
 
-let ratings = {};    // { key: starCount (0-12) }
-let percents = {};   // { key: percent (0-100, 2 desimal) }
-let addedStudents = []; // [[name, nim], ...]
+// ====== GANTI BAGIAN INI DENGAN firebaseConfig DARI FIREBASE CONSOLE ======
+const firebaseConfig = {
+  apiKey: "AIzaSyBU1tglAQ-wHqbvmGYgVulayZLHF0FBGqQ",
+  authDomain: "peringkatmaba.firebaseapp.com",
+  databaseURL: "https://peringkatmaba-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "peringkatmaba",
+  storageBucket: "peringkatmaba.firebasestorage.app",
+  messagingSenderId: "1054717935480",
+  appId: "1:1054717935480:web:ebdd0ecafb30b0b94a128d"
+};
+// ===========================================================================
+
+let ratings = {};
+let percents = {};
+let addedStudents = [];
 let isAdmin = false;
+let dbRef = null;
 
 const listEl = document.getElementById("list");
 const statusEl = document.getElementById("status-text");
@@ -240,10 +175,6 @@ const resetBtn = document.getElementById("reset-btn");
 const addForm = document.getElementById("add-form");
 const addNameInput = document.getElementById("add-name");
 const addNimInput = document.getElementById("add-nim");
-const pinInput = document.getElementById("pin-input");
-const pinBtn = document.getElementById("pin-btn");
-const pinMsg = document.getElementById("pin-msg");
-const modeBadge = document.getElementById("mode-badge");
 const adminBar = document.getElementById("admin-bar");
 
 function allStudents(){ return students.concat(addedStudents); }
@@ -257,18 +188,12 @@ function medalFor(idx){
 
 function setAdminUI(){
   if(isAdmin){
-    modeBadge.textContent = "Mode Admin";
-    modeBadge.className = "badge admin";
     adminBar.innerHTML = '<span class="badge admin">Mode Admin</span><button id="logout-btn">Keluar admin</button>';
-    document.getElementById("logout-btn").addEventListener("click", ()=>{
-      isAdmin = false;
-      setAdminUI();
-      render();
-    });
+    document.getElementById("logout-btn").addEventListener("click", ()=>{ isAdmin=false; setAdminUI(); render(); });
     addForm.style.display = "flex";
     resetBtn.style.display = "inline-block";
   }else{
-    adminBar.innerHTML = '<span class="badge view" id="mode-badge">Mode Lihat</span><input id="pin-input" type="password" placeholder="Kode admin" maxlength="20"><button id="pin-btn">Masuk</button><span id="pin-msg"></span>';
+    adminBar.innerHTML = '<span class="badge view">Mode Lihat</span><input id="pin-input" type="password" placeholder="Kode admin" maxlength="20"><button id="pin-btn">Masuk</button><span id="pin-msg"></span>';
     document.getElementById("pin-btn").addEventListener("click", tryLogin);
     document.getElementById("pin-input").addEventListener("keydown", (e)=>{ if(e.key==="Enter") tryLogin(); });
     addForm.style.display = "none";
@@ -278,13 +203,8 @@ function setAdminUI(){
 
 function tryLogin(){
   const val = document.getElementById("pin-input").value;
-  if(val === ADMIN_PIN){
-    isAdmin = true;
-    setAdminUI();
-    render();
-  }else{
-    document.getElementById("pin-msg").textContent = "Kode salah";
-  }
+  if(val === ADMIN_PIN){ isAdmin = true; setAdminUI(); render(); }
+  else{ document.getElementById("pin-msg").textContent = "Kode salah"; }
 }
 
 function render(){
@@ -323,7 +243,6 @@ function render(){
         star.addEventListener("click", ()=>{
           ratings[s.key] = (ratings[s.key]===i) ? i-1 : i;
           saveData();
-          render();
         });
       }
       starsWrap.appendChild(star);
@@ -343,7 +262,6 @@ function render(){
         v = Math.max(0, Math.min(100, v));
         percents[s.key] = v;
         saveData();
-        render();
       });
       percentWrap.appendChild(pInput);
     }else{
@@ -361,57 +279,57 @@ function render(){
   });
 }
 
-async function saveData(){
-  try{
-    const payload = JSON.stringify({ ratings, percents, addedStudents });
-    await window.storage.set(DATA_KEY, payload, true); // shared: true -> semua orang lihat data yang sama
-    statusEl.textContent = "Tersimpan otomatis";
-  }catch(e){
-    statusEl.textContent = "Gagal menyimpan (coba lagi)";
-    console.error(e);
-  }
+function saveData(){
+  if(!dbRef) return;
+  statusEl.textContent = "Menyimpan…";
+  dbRef.set({ ratings, percents, addedStudents })
+    .then(()=>{ statusEl.textContent = "Tersimpan — tersinkron ke semua HP"; })
+    .catch((e)=>{ statusEl.textContent = "Gagal menyimpan"; console.error(e); });
 }
 
-async function loadData(){
-  try{
-    const res = await window.storage.get(DATA_KEY, true);
-    const data = res && res.value ? JSON.parse(res.value) : {};
-    ratings = data.ratings || {};
-    percents = data.percents || {};
-    addedStudents = data.addedStudents || [];
-    statusEl.textContent = "Data peringkat dimuat";
-  }catch(e){
-    ratings = {}; percents = {}; addedStudents = [];
-    statusEl.textContent = "Belum ada penilaian tersimpan";
-  }
-  render();
-}
-
-resetBtn.addEventListener("click", async ()=>{
-  if(!isAdmin) return;
-  ratings = {}; percents = {};
-  await saveData();
-  statusEl.textContent = "Semua nilai direset";
-  render();
-});
-
-addForm.addEventListener("submit", async (e)=>{
+addForm.addEventListener("submit", (e)=>{
   e.preventDefault();
-  if(!isAdmin) return;
+  if(!isAdmin || !dbRef) return;
   const name = addNameInput.value.trim().toUpperCase();
   const nim = addNimInput.value.trim();
   if(!name) return;
   addedStudents.push([name, nim]);
-  await saveData();
-  addNameInput.value = "";
-  addNimInput.value = "";
-  statusEl.textContent = `${name} ditambahkan`;
-  render();
+  saveData();
+  addNameInput.value = ""; addNimInput.value = "";
   addNameInput.focus();
 });
 
-setAdminUI();
-loadData();
+resetBtn.addEventListener("click", ()=>{
+  if(!isAdmin) return;
+  ratings = {}; percents = {};
+  saveData();
+});
+
+function init(){
+  const notConfigured = !firebaseConfig.apiKey || firebaseConfig.apiKey.indexOf("GANTI") === 0;
+  if(notConfigured){
+    document.getElementById("setup-notice").style.display = "block";
+    return;
+  }
+  document.getElementById("app").style.display = "block";
+  firebase.initializeApp(firebaseConfig);
+  dbRef = firebase.database().ref("ptb-ppkmb-2026-data");
+
+  setAdminUI();
+  dbRef.on("value", (snapshot)=>{
+    const data = snapshot.val() || {};
+    ratings = data.ratings || {};
+    percents = data.percents || {};
+    addedStudents = data.addedStudents || [];
+    statusEl.textContent = "Tersinkron langsung";
+    render();
+  }, (err)=>{
+    statusEl.textContent = "Gagal terhubung ke database";
+    console.error(err);
+  });
+}
+
+init();
 </script>
 </body>
 </html>
