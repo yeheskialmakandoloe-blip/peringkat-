@@ -52,6 +52,12 @@
   .toolbar{display:flex;justify-content:space-between;align-items:center;font-family:'Helvetica Neue',Arial,sans-serif;font-size:12px;color:var(--muted);margin-bottom:14px;padding:0 2px;}
   #reset-btn{font-family:inherit;background:none;border:1px solid var(--line);border-radius:20px;padding:5px 14px;font-size:11.5px;color:var(--navy);cursor:pointer;transition:.15s;}
   #reset-btn:hover{background:var(--navy);color:#fff;border-color:var(--navy);}
+  #reveal-names-btn{font-family:inherit;background:var(--gold-soft);border:1px solid var(--gold);border-radius:20px;padding:5px 14px;font-size:11.5px;color:var(--navy-deep);font-weight:700;cursor:pointer;transition:.15s;margin-right:8px;}
+  #reveal-names-btn:hover{background:var(--gold);}
+  .toolbar-right{display:flex;gap:8px;align-items:center;}
+  .name.blurred{filter:blur(7px);user-select:none;transition:filter .4s ease;}
+  .meta.blurred{filter:blur(5px);user-select:none;transition:filter .4s ease;}
+  .name, .meta{transition:filter .4s ease;}
 
   .row{display:grid;grid-template-columns:38px 1fr auto auto;gap:12px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin-bottom:8px;transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease;}
   .row.top{border-color:var(--gold);box-shadow:0 2px 10px rgba(201,162,39,.18);background:linear-gradient(90deg,#fffdf6,#ffffff);}
@@ -74,11 +80,59 @@
 
   footer{text-align:center;font-family:'Helvetica Neue',Arial,sans-serif;font-size:11px;color:var(--muted);margin-top:26px;}
 
+  /* ===== Kartu ringkasan (top 4 cards) ===== */
+  .top-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:22px;}
+  .top-card{background:linear-gradient(160deg,#ffffff,#fbf8ef);border:1px solid var(--line);border-radius:12px;padding:14px 12px;text-align:center;box-shadow:0 2px 8px rgba(22,50,79,.06);}
+  .top-card .tc-icon{font-size:20px;margin-bottom:4px;}
+  .top-card .tc-label{font-family:'Helvetica Neue',Arial,sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700;margin-bottom:4px;}
+  .top-card .tc-value{font-size:14.5px;font-weight:700;color:var(--navy-deep);line-height:1.25;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;}
+  .top-card .tc-sub{font-family:'Helvetica Neue',Arial,sans-serif;font-size:10.5px;color:var(--gold);font-weight:700;margin-top:3px;}
+  .top-card .tc-value.blurred, .top-card .tc-sub.blurred{filter:blur(7px);user-select:none;transition:filter .4s ease;}
+  .top-card .tc-value, .top-card .tc-sub{transition:filter .4s ease;}
+  .tc-reveal-btn{font-family:'Helvetica Neue',Arial,sans-serif;font-size:10.5px;font-weight:700;margin-top:7px;padding:5px 12px;border-radius:20px;border:1px solid var(--navy);background:#fff;color:var(--navy);cursor:pointer;transition:.15s;}
+  .tc-reveal-btn:hover{background:var(--navy);color:#fff;}
+  @media (max-width:480px){
+    .top-cards{grid-template-columns:repeat(2,1fr);}
+    .top-card{padding:10px 8px;}
+    .top-card .tc-value{font-size:12.5px;}
+  }
+
+  /* ===== Tabs ===== */
+  .tabs{display:flex;gap:6px;flex-wrap:wrap;font-family:'Helvetica Neue',Arial,sans-serif;margin-bottom:16px;border-bottom:1px solid var(--line);padding-bottom:0;}
+  .tab-btn{font-family:inherit;font-size:12.5px;font-weight:700;padding:9px 14px;border:none;background:none;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:.15s;}
+  .tab-btn:hover{color:var(--navy);}
+  .tab-btn.active{color:var(--navy-deep);border-bottom-color:var(--gold);}
+  .tab-panel{display:none;}
+  .tab-panel.active{display:block;}
+
+  .section-note{font-family:'Helvetica Neue',Arial,sans-serif;font-size:12px;color:var(--muted);margin:0 0 14px;line-height:1.6;}
+
+  /* ===== Sub-tabs (Tugas) ===== */
+  .subtabs{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:14px;font-family:'Helvetica Neue',Arial,sans-serif;}
+  .subtab-btn{font-size:12px;font-weight:700;padding:6px 13px;border-radius:20px;border:1px solid var(--line);background:#fff;color:var(--navy);cursor:pointer;transition:.15s;}
+  .subtab-btn:hover{background:var(--cream);}
+  .subtab-btn.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+  #add-task-btn{font-size:16px;font-weight:700;padding:5px 12px;border-radius:20px;border:1px dashed var(--gold);background:#fff;color:var(--gold);cursor:pointer;line-height:1;}
+  #add-task-btn:hover{background:var(--gold-soft);}
+
+  /* ===== Baris kelompok / video / like ===== */
+  .row.grouprow{grid-template-columns:38px 1fr auto auto;}
+  .group-input{font-family:'Helvetica Neue',Arial,sans-serif;font-size:12px;width:96px;padding:6px 8px;border:1px solid var(--line);border-radius:6px;color:var(--navy);}
+  .group-input:focus{outline:2px solid var(--gold-soft);border-color:var(--gold);}
+  .group-tag{font-family:'Helvetica Neue',Arial,sans-serif;font-size:11px;background:var(--cream);color:var(--navy);padding:3px 9px;border-radius:20px;font-weight:700;}
+
+  .like-wrap{display:flex;align-items:center;gap:6px;justify-content:flex-end;}
+  .like-btn{font-family:'Helvetica Neue',Arial,sans-serif;font-size:13px;border:1px solid var(--line);background:#fff;border-radius:20px;padding:5px 11px;cursor:pointer;display:flex;align-items:center;gap:5px;color:#B5473A;font-weight:700;transition:.15s;}
+  .like-btn:hover{background:#FFF3F1;border-color:#E9C2BC;}
+  .like-btn:active{transform:scale(.94);}
+  .like-count{font-size:12px;}
+
   @media (max-width:480px){
     .row{grid-template-columns:26px 1fr auto auto;padding:10px 8px;gap:6px;}
     .stars{font-size:11px;max-width:80px;}
     .name{font-size:13.5px;}
     .percent, .percent-input{font-size:11px;min-width:40px;width:48px;}
+    .group-input{width:76px;}
   }
 </style>
 </head>
@@ -109,18 +163,54 @@
 
   <div class="admin-bar" id="admin-bar"></div>
 
-  <form id="add-form" class="add-form" style="display:none;">
-    <input id="add-name" type="text" placeholder="Nama mahasiswa" required>
-    <input id="add-nim" type="text" placeholder="NIM (opsional)">
-    <button type="submit">Tambah</button>
-  </form>
+  <div class="top-cards" id="top-cards"></div>
 
-  <div class="toolbar">
-    <span id="status-text">Memuat data…</span>
-    <button id="reset-btn" style="display:none;">Reset semua nilai</button>
+  <div class="tabs" id="tabs">
+    <button class="tab-btn active" data-tab="utama">Peringkat Utama</button>
+    <button class="tab-btn" data-tab="video">Video Perkenalan</button>
+    <button class="tab-btn" data-tab="kelompok">Penilaian Kelompok</button>
+    <button class="tab-btn" data-tab="tugas">Penilaian Tugas</button>
   </div>
 
-  <div id="list"></div>
+  <!-- ===== TAB: Peringkat Utama ===== -->
+  <div class="tab-panel active" id="panel-utama">
+    <form id="add-form" class="add-form" style="display:none;">
+      <input id="add-name" type="text" placeholder="Nama mahasiswa" required>
+      <input id="add-nim" type="text" placeholder="NIM (opsional)">
+      <button type="submit">Tambah</button>
+    </form>
+
+    <div class="toolbar">
+      <span id="status-text">Memuat data…</span>
+      <div class="toolbar-right">
+        <button id="reveal-names-btn" style="display:none;">👁️ Tampilkan Nama</button>
+        <button id="reset-btn" style="display:none;">Reset semua nilai</button>
+      </div>
+    </div>
+
+    <div id="list"></div>
+  </div>
+
+  <!-- ===== TAB: Video Perkenalan ===== -->
+  <div class="tab-panel" id="panel-video">
+    <p class="section-note">Penilaian video perkenalan tiap mahasiswa (bintang) dan jumlah like foto — like bisa ditekan siapa saja, bintang hanya oleh admin.</p>
+    <div id="list-video"></div>
+  </div>
+
+  <!-- ===== TAB: Penilaian Kelompok ===== -->
+  <div class="tab-panel" id="panel-kelompok">
+    <p class="section-note">Admin mengisi nama kelompok tiap mahasiswa terlebih dahulu, lalu memberi nilai per kelompok di bawahnya.</p>
+    <div id="list-assign"></div>
+    <h3 style="font-family:'Helvetica Neue',Arial,sans-serif;font-size:13px;color:var(--navy-deep);margin:22px 0 10px;">Nilai per Kelompok</h3>
+    <div id="list-groups"></div>
+  </div>
+
+  <!-- ===== TAB: Penilaian Tugas ===== -->
+  <div class="tab-panel" id="panel-tugas">
+    <div class="subtabs" id="task-subtabs"></div>
+    <div id="list-tugas"></div>
+  </div>
+
   <footer>Data tersinkron otomatis ke semua HP · hanya admin yang bisa menilai · 60 mahasiswa PTB angkatan 2026</footer>
 </div>
 </div>
@@ -169,15 +259,43 @@ let addedStudents = [];
 let isAdmin = false;
 let dbRef = null;
 
+// --- Data tambahan: Video Perkenalan, Kelompok, Tugas ---
+let videoRatings = {};   // key -> bintang (1-5) untuk video perkenalan
+let photoLikes = {};     // key -> jumlah like (siapa saja boleh menekan)
+let groups = {};         // key -> nama kelompok (teks bebas, diisi admin)
+let groupRatings = {};   // namaKelompok -> bintang (1-12)
+let groupPercents = {};  // namaKelompok -> persen
+let tasks = ["Tugas 1","Tugas 2","Tugas 3"]; // daftar tugas, admin bisa tambah
+let taskRatings = {};    // { "0": { key: bintang }, "1": {...}, ... }
+let taskPercents = {};   // { "0": { key: persen }, ... }
+let activeTab = "utama";
+let activeTaskIdx = 0;
+let cardRevealed = { kelompok:false, mahasiswa:false, video:false, like:false };
+let listNameRevealed = false;
+
 const listEl = document.getElementById("list");
 const statusEl = document.getElementById("status-text");
 const resetBtn = document.getElementById("reset-btn");
+const revealNamesBtn = document.getElementById("reveal-names-btn");
 const addForm = document.getElementById("add-form");
 const addNameInput = document.getElementById("add-name");
 const addNimInput = document.getElementById("add-nim");
 const adminBar = document.getElementById("admin-bar");
+const topCardsEl = document.getElementById("top-cards");
+const listVideoEl = document.getElementById("list-video");
+const listAssignEl = document.getElementById("list-assign");
+const listGroupsEl = document.getElementById("list-groups");
+const listTugasEl = document.getElementById("list-tugas");
+const taskSubtabsEl = document.getElementById("task-subtabs");
 
 function allStudents(){ return students.concat(addedStudents); }
+
+function studentKeyList(){
+  return allStudents().map(([name,nim],i)=>{
+    const key = nim && nim.trim() ? nim : `_noNIM_${i}`;
+    return { name, key, label: nim && nim.trim() ? nim : "—" };
+  });
+}
 
 function medalFor(idx){
   if(idx===0) return "🥇";
@@ -192,14 +310,22 @@ function setAdminUI(){
     document.getElementById("logout-btn").addEventListener("click", ()=>{ isAdmin=false; setAdminUI(); render(); });
     addForm.style.display = "flex";
     resetBtn.style.display = "inline-block";
+    revealNamesBtn.style.display = "inline-block";
   }else{
     adminBar.innerHTML = '<span class="badge view">Mode Lihat</span><input id="pin-input" type="password" placeholder="Kode admin" maxlength="20"><button id="pin-btn">Masuk</button><span id="pin-msg"></span>';
     document.getElementById("pin-btn").addEventListener("click", tryLogin);
     document.getElementById("pin-input").addEventListener("keydown", (e)=>{ if(e.key==="Enter") tryLogin(); });
     addForm.style.display = "none";
     resetBtn.style.display = "none";
+    revealNamesBtn.style.display = "none";
   }
 }
+
+revealNamesBtn.addEventListener("click", ()=>{
+  if(!isAdmin) return;
+  listNameRevealed = !listNameRevealed;
+  saveData();
+});
 
 function tryLogin(){
   const val = document.getElementById("pin-input").value;
@@ -220,6 +346,9 @@ function render(){
     .sort((a,b)=> b.stars - a.stars || b.percent - a.percent || a.origIdx - b.origIdx);
 
   listEl.innerHTML = "";
+  if(isAdmin){
+    revealNamesBtn.textContent = listNameRevealed ? "🙈 Sembunyikan Nama" : "👁️ Tampilkan Nama";
+  }
   order.forEach((s,idx)=>{
     const row = document.createElement("div");
     row.className = "row" + ((s.stars>0 || s.percent>0) && idx<3 ? " top" : "");
@@ -231,7 +360,8 @@ function render(){
 
     const info = document.createElement("div");
     info.className = "info";
-    info.innerHTML = `<div class="name">${s.name}</div><div class="meta">NIM ${s.label} · PTB</div>`;
+    const nameBlurCls = listNameRevealed ? "" : " blurred";
+    info.innerHTML = `<div class="name${nameBlurCls}">${s.name}</div><div class="meta${nameBlurCls}">NIM ${s.label} · PTB</div>`;
 
     const starsWrap = document.createElement("div");
     starsWrap.className = "stars" + (isAdmin ? " editable" : "");
@@ -277,12 +407,387 @@ function render(){
     row.appendChild(percentWrap);
     listEl.appendChild(row);
   });
+
+  renderTopCards();
+  renderVideoTab();
+  renderKelompokTab();
+  renderTugasTab();
+}
+
+// ================= TAB SWITCHING =================
+document.getElementById("tabs").addEventListener("click", (e)=>{
+  const btn = e.target.closest(".tab-btn");
+  if(!btn) return;
+  activeTab = btn.dataset.tab;
+  document.querySelectorAll(".tab-btn").forEach(b=> b.classList.toggle("active", b===btn));
+  document.querySelectorAll(".tab-panel").forEach(p=> p.classList.toggle("active", p.id === "panel-"+activeTab));
+});
+
+// ================= KARTU RINGKASAN (TOP 4) =================
+// Animasi acak nama sebelum nama asli muncul (efek kejutan)
+function animateReveal(valueEl, pool, finalText, onDone){
+  valueEl.classList.remove("blurred");
+  if(!pool || pool.length===0){ valueEl.textContent = finalText; onDone(); return; }
+  let ticks = 0;
+  const maxTicks = 14;
+  let delay = 55;
+  function step(){
+    valueEl.textContent = pool[Math.floor(Math.random()*pool.length)];
+    ticks++;
+    delay += 14;
+    if(ticks < maxTicks){
+      setTimeout(step, delay);
+    }else{
+      valueEl.textContent = finalText;
+      onDone();
+    }
+  }
+  step();
+}
+
+function renderTopCards(){
+  const list = studentKeyList();
+
+  // Mahasiswa terbaik: bintang+persen tertinggi (peringkat utama) — tampilkan semua jika seri
+  let bestStudent = { st:-1, pc:-1, names:[] };
+  list.forEach(s=>{
+    const st = ratings[s.key]||0, pc = percents[s.key]||0;
+    if(st===0 && pc===0) return;
+    if(st>bestStudent.st || (st===bestStudent.st && pc>bestStudent.pc)){
+      bestStudent = {st, pc, names:[s.name]};
+    }else if(st===bestStudent.st && pc===bestStudent.pc){
+      bestStudent.names.push(s.name);
+    }
+  });
+
+  // Video perkenalan terbaik — tampilkan semua jika seri
+  let bestVideo = { st:-1, names:[] };
+  list.forEach(s=>{
+    const st = videoRatings[s.key]||0;
+    if(st===0) return;
+    if(st>bestVideo.st){ bestVideo = {st, names:[s.name]}; }
+    else if(st===bestVideo.st){ bestVideo.names.push(s.name); }
+  });
+
+  // Like foto terbanyak — tampilkan semua jika seri
+  let bestLike = { lk:-1, names:[] };
+  list.forEach(s=>{
+    const lk = photoLikes[s.key]||0;
+    if(lk===0) return;
+    if(lk>bestLike.lk){ bestLike = {lk, names:[s.name]}; }
+    else if(lk===bestLike.lk){ bestLike.names.push(s.name); }
+  });
+
+  // Kelompok terbaik — tampilkan semua jika seri
+  const groupNamesUsed = [...new Set(Object.values(groups).filter(g=>g && g.trim()))];
+  let bestGroup = { st:-1, pc:-1, names:[] };
+  groupNamesUsed.forEach(g=>{
+    const st = groupRatings[g]||0, pc = groupPercents[g]||0;
+    if(st===0 && pc===0) return;
+    if(st>bestGroup.st || (st===bestGroup.st && pc>bestGroup.pc)){
+      bestGroup = {st, pc, names:[g]};
+    }else if(st===bestGroup.st && pc===bestGroup.pc){
+      bestGroup.names.push(g);
+    }
+  });
+
+  const fmtNames = (arr)=> arr.length ? arr.join(", ") : "Belum ada nilai";
+
+  const cards = [
+    { key:"kelompok", icon:"👥", label:"Kelompok Terbaik", value: fmtNames(bestGroup.names), sub: bestGroup.names.length ? `${bestGroup.st}★` : "" },
+    { key:"mahasiswa", icon:"🏆", label:"Mahasiswa Terbaik", value: fmtNames(bestStudent.names), sub: bestStudent.names.length ? `${bestStudent.st}★` : "" },
+    { key:"video", icon:"🎬", label:"Video Perkenalan Terbaik", value: fmtNames(bestVideo.names), sub: bestVideo.names.length ? `${bestVideo.st}★` : "" },
+    { key:"like", icon:"❤️", label:"Like Foto Terbanyak", value: bestLike.names.length ? fmtNames(bestLike.names) : "Belum ada like", sub: bestLike.names.length ? `${bestLike.lk} like` : "" },
+  ];
+
+  topCardsEl.innerHTML = "";
+  cards.forEach(c=>{
+    const div = document.createElement("div");
+    div.className = "top-card";
+    const revealed = cardRevealed[c.key];
+    const blurCls = revealed ? "" : " blurred";
+    div.innerHTML = `<div class="tc-icon">${c.icon}</div><div class="tc-label">${c.label}</div><div class="tc-value${blurCls}">${c.value}</div>${c.sub ? `<div class="tc-sub${blurCls}">${c.sub}</div>` : ""}`;
+    if(!revealed && isAdmin){
+      const btn = document.createElement("button");
+      btn.className = "tc-reveal-btn";
+      btn.textContent = "🔍 Tampilkan";
+      btn.addEventListener("click", ()=>{
+        btn.disabled = true;
+        btn.textContent = "✨ Mengundi…";
+        const valueEl = div.querySelector(".tc-value");
+        const subEl = div.querySelector(".tc-sub");
+        const pool = c.key === "kelompok"
+          ? (groupNamesUsed.length ? groupNamesUsed : list.map(s=>s.name))
+          : list.map(s=>s.name);
+        animateReveal(valueEl, pool, c.value, ()=>{
+          if(subEl) subEl.classList.remove("blurred");
+          cardRevealed[c.key] = true;
+          saveData();
+        });
+      });
+      div.appendChild(btn);
+    }else if(!revealed && !isAdmin){
+      const lock = document.createElement("div");
+      lock.className = "tc-reveal-btn";
+      lock.style.cursor = "default";
+      lock.style.opacity = "0.6";
+      lock.textContent = "🔒 Belum diumumkan";
+      div.appendChild(lock);
+    }else if(revealed && isAdmin){
+      const btn = document.createElement("button");
+      btn.className = "tc-reveal-btn";
+      btn.textContent = "🙈 Sembunyikan lagi";
+      btn.addEventListener("click", ()=>{ cardRevealed[c.key] = false; saveData(); });
+      div.appendChild(btn);
+    }
+    topCardsEl.appendChild(div);
+  });
+}
+
+// ================= helper: baris bintang generik =================
+function buildStarsWrap(currentStars, maxStars, onSet){
+  const wrap = document.createElement("div");
+  wrap.className = "stars" + (isAdmin ? " editable" : "");
+  for(let i=1;i<=maxStars;i++){
+    const star = document.createElement("span");
+    star.className = "star" + (i<=currentStars ? " on" : "");
+    star.textContent = i<=currentStars ? "★" : "☆";
+    if(isAdmin){
+      star.addEventListener("click", ()=> onSet(currentStars===i ? i-1 : i));
+    }
+    wrap.appendChild(star);
+  }
+  return wrap;
+}
+
+function buildPercentWrap(currentPercent, onSet){
+  const wrap = document.createElement("div");
+  if(isAdmin){
+    const input = document.createElement("input");
+    input.type = "number"; input.min="0"; input.max="100"; input.step="0.01";
+    input.className = "percent-input";
+    input.value = currentPercent || "";
+    input.placeholder = "0%";
+    input.addEventListener("change", ()=>{
+      let v = parseFloat(input.value);
+      if(isNaN(v)) v = 0;
+      v = Math.max(0, Math.min(100, v));
+      onSet(v);
+    });
+    wrap.appendChild(input);
+  }else{
+    const span = document.createElement("span");
+    span.className = "percent";
+    span.textContent = currentPercent ? currentPercent.toFixed(2)+"%" : "—";
+    wrap.appendChild(span);
+  }
+  return wrap;
+}
+
+// ================= TAB: Video Perkenalan =================
+function renderVideoTab(){
+  const list = studentKeyList();
+  listVideoEl.innerHTML = "";
+  list.forEach(s=>{
+    const row = document.createElement("div");
+    row.className = "row";
+
+    const rank = document.createElement("div");
+    rank.className = "rank"; rank.textContent = "🎬";
+
+    const info = document.createElement("div");
+    info.className = "info";
+    info.innerHTML = `<div class="name">${s.name}</div><div class="meta">NIM ${s.label}</div>`;
+
+    const starsWrap = buildStarsWrap(videoRatings[s.key]||0, 5, (v)=>{
+      videoRatings[s.key] = v; saveData();
+    });
+
+    const likeWrap = document.createElement("div");
+    likeWrap.className = "like-wrap";
+    const likeBtn = document.createElement("button");
+    likeBtn.className = "like-btn";
+    likeBtn.innerHTML = `❤️ <span class="like-count">${photoLikes[s.key]||0}</span>`;
+    likeBtn.addEventListener("click", ()=>{
+      photoLikes[s.key] = (photoLikes[s.key]||0) + 1;
+      saveData();
+    });
+    likeWrap.appendChild(likeBtn);
+
+    row.appendChild(rank);
+    row.appendChild(info);
+    row.appendChild(starsWrap);
+    row.appendChild(likeWrap);
+    listVideoEl.appendChild(row);
+  });
+}
+
+// ================= TAB: Penilaian Kelompok =================
+function renderKelompokTab(){
+  const list = studentKeyList();
+
+  // -- Daftar penugasan kelompok per mahasiswa (hanya admin bisa edit) --
+  listAssignEl.innerHTML = "";
+  list.forEach(s=>{
+    const row = document.createElement("div");
+    row.className = "row grouprow";
+
+    const rank = document.createElement("div");
+    rank.className = "rank"; rank.textContent = "👤";
+
+    const info = document.createElement("div");
+    info.className = "info";
+    info.innerHTML = `<div class="name">${s.name}</div><div class="meta">NIM ${s.label}</div>`;
+
+    const groupWrap = document.createElement("div");
+    if(isAdmin){
+      const input = document.createElement("input");
+      input.type = "text";
+      input.className = "group-input";
+      input.placeholder = "Nama kelompok";
+      input.value = groups[s.key] || "";
+      input.addEventListener("change", ()=>{
+        groups[s.key] = input.value.trim();
+        saveData();
+      });
+      groupWrap.appendChild(input);
+    }else{
+      const tag = document.createElement("span");
+      tag.className = "group-tag";
+      tag.textContent = groups[s.key] && groups[s.key].trim() ? groups[s.key] : "Belum ada kelompok";
+      groupWrap.appendChild(tag);
+    }
+
+    const spacer = document.createElement("div");
+
+    row.appendChild(rank);
+    row.appendChild(info);
+    row.appendChild(groupWrap);
+    row.appendChild(spacer);
+    listAssignEl.appendChild(row);
+  });
+
+  // -- Nilai per kelompok --
+  const groupNamesUsed = [...new Set(Object.values(groups).filter(g=>g && g.trim()))]
+    .sort((a,b)=>{
+      const sa = groupRatings[a]||0, sb = groupRatings[b]||0;
+      const pa = groupPercents[a]||0, pb = groupPercents[b]||0;
+      return sb-sa || pb-pa || a.localeCompare(b);
+    });
+
+  listGroupsEl.innerHTML = "";
+  if(groupNamesUsed.length===0){
+    listGroupsEl.innerHTML = '<p class="section-note">Belum ada kelompok. Isi nama kelompok pada daftar mahasiswa di atas terlebih dahulu.</p>';
+    return;
+  }
+  groupNamesUsed.forEach((g,idx)=>{
+    const row = document.createElement("div");
+    row.className = "row" + (idx<3 && ((groupRatings[g]||0)>0 || (groupPercents[g]||0)>0) ? " top" : "");
+
+    const rank = document.createElement("div");
+    rank.className = "rank";
+    const medal = medalFor(idx);
+    rank.innerHTML = (medal && ((groupRatings[g]||0)>0 || (groupPercents[g]||0)>0)) ? `<span class="medal">${medal}</span>` : (idx+1);
+
+    const info = document.createElement("div");
+    info.className = "info";
+    const count = Object.values(groups).filter(x=>x===g).length;
+    info.innerHTML = `<div class="name">${g}</div><div class="meta">${count} anggota</div>`;
+
+    const starsWrap = buildStarsWrap(groupRatings[g]||0, 12, (v)=>{
+      groupRatings[g] = v; saveData();
+    });
+
+    const percentWrap = buildPercentWrap(groupPercents[g]||0, (v)=>{
+      groupPercents[g] = v; saveData();
+    });
+
+    row.appendChild(rank);
+    row.appendChild(info);
+    row.appendChild(starsWrap);
+    row.appendChild(percentWrap);
+    listGroupsEl.appendChild(row);
+  });
+}
+
+// ================= TAB: Penilaian Tugas =================
+function renderTaskSubtabs(){
+  taskSubtabsEl.innerHTML = "";
+  tasks.forEach((t,idx)=>{
+    const btn = document.createElement("button");
+    btn.className = "subtab-btn" + (idx===activeTaskIdx ? " active" : "");
+    btn.textContent = t;
+    btn.addEventListener("click", ()=>{ activeTaskIdx = idx; render(); });
+    taskSubtabsEl.appendChild(btn);
+  });
+  if(isAdmin){
+    const addBtn = document.createElement("button");
+    addBtn.id = "add-task-btn";
+    addBtn.textContent = "+";
+    addBtn.title = "Tambah tugas baru";
+    addBtn.addEventListener("click", ()=>{
+      const n = tasks.length + 1;
+      tasks.push(`Tugas ${n}`);
+      activeTaskIdx = tasks.length - 1;
+      saveData();
+    });
+    taskSubtabsEl.appendChild(addBtn);
+  }
+}
+
+function renderTugasTab(){
+  renderTaskSubtabs();
+  if(activeTaskIdx >= tasks.length) activeTaskIdx = 0;
+  const key = String(activeTaskIdx);
+  const tRatings = taskRatings[key] || {};
+  const tPercents = taskPercents[key] || {};
+
+  const list = studentKeyList()
+    .map(s=>({ ...s, stars: tRatings[s.key]||0, percent: tPercents[s.key]!==undefined ? tPercents[s.key] : 0 }))
+    .sort((a,b)=> b.stars-a.stars || b.percent-a.percent);
+
+  listTugasEl.innerHTML = "";
+  list.forEach((s,idx)=>{
+    const row = document.createElement("div");
+    row.className = "row" + ((s.stars>0 || s.percent>0) && idx<3 ? " top" : "");
+
+    const rank = document.createElement("div");
+    rank.className = "rank";
+    const medal = medalFor(idx);
+    rank.innerHTML = (medal && (s.stars>0 || s.percent>0)) ? `<span class="medal">${medal}</span>` : (idx+1);
+
+    const info = document.createElement("div");
+    info.className = "info";
+    info.innerHTML = `<div class="name">${s.name}</div><div class="meta">NIM ${s.label}</div>`;
+
+    const starsWrap = buildStarsWrap(s.stars, 12, (v)=>{
+      if(!taskRatings[key]) taskRatings[key] = {};
+      taskRatings[key][s.key] = v; saveData();
+    });
+
+    const percentWrap = buildPercentWrap(s.percent, (v)=>{
+      if(!taskPercents[key]) taskPercents[key] = {};
+      taskPercents[key][s.key] = v; saveData();
+    });
+
+    row.appendChild(rank);
+    row.appendChild(info);
+    row.appendChild(starsWrap);
+    row.appendChild(percentWrap);
+    listTugasEl.appendChild(row);
+  });
 }
 
 function saveData(){
   if(!dbRef) return;
   statusEl.textContent = "Menyimpan…";
-  dbRef.set({ ratings, percents, addedStudents })
+  dbRef.set({
+    ratings, percents, addedStudents,
+    videoRatings, photoLikes,
+    groups, groupRatings, groupPercents,
+    tasks, taskRatings, taskPercents,
+    cardRevealed, listNameRevealed
+  })
     .then(()=>{ statusEl.textContent = "Tersimpan — tersinkron ke semua HP"; })
     .catch((e)=>{ statusEl.textContent = "Gagal menyimpan"; console.error(e); });
 }
@@ -321,6 +826,16 @@ function init(){
     ratings = data.ratings || {};
     percents = data.percents || {};
     addedStudents = data.addedStudents || [];
+    videoRatings = data.videoRatings || {};
+    photoLikes = data.photoLikes || {};
+    groups = data.groups || {};
+    groupRatings = data.groupRatings || {};
+    groupPercents = data.groupPercents || {};
+    tasks = (data.tasks && data.tasks.length) ? data.tasks : ["Tugas 1","Tugas 2","Tugas 3"];
+    taskRatings = data.taskRatings || {};
+    taskPercents = data.taskPercents || {};
+    cardRevealed = data.cardRevealed || { kelompok:false, mahasiswa:false, video:false, like:false };
+    listNameRevealed = data.listNameRevealed || false;
     statusEl.textContent = "Tersinkron langsung";
     render();
   }, (err)=>{
